@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>暖心待辦看板 · Warm Kanban</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-container">
+    <header class="app-header">
+      <div>
+        <h1 class="app-title">待辦任務看板</h1>
+        <p class="app-subtitle">自由拖曳任務卡片，依優先程度 (High / Medium / Low) 自動排序管理</p>
+      </div>
+      <div class="stats-badge" id="todo-stats" aria-live="polite">
+        未完成 <span id="remaining-count">0</span> 項
+      </div>
+    </header>
+
+    <form id="todo-form" class="todo-form" autocomplete="off">
+      <div class="input-row-main">
+        <input
+          type="text"
+          id="todo-input"
+          class="input-field input-task"
+          placeholder="今天想完成什麼任務？"
+          required
+          aria-label="任務內容"
+        />
+      </div>
+      <div class="input-row-meta">
+        <div class="assignee-input-wrapper">
+          <span class="input-icon" aria-hidden="true">👤</span>
+          <input
+            type="text"
+            id="todo-assignee"
+            class="input-field input-assignee"
+            placeholder="負責人 (選填)"
+            aria-label="負責人姓名"
+          />
+        </div>
+        <select id="todo-priority" class="select-field" aria-label="任務優先程度">
+          <option value="high">🔥 High (高優先)</option>
+          <option value="medium" selected>⚡ Medium (中優先)</option>
+          <option value="low">🌱 Low (低優先)</option>
+        </select>
+        <select id="todo-category" class="select-field" aria-label="任務分類">
+          <option value="work">💼 工作</option>
+          <option value="life">🌿 生活</option>
+        </select>
+        <button type="submit" class="btn-add">
+          <span>＋ 新增任務</span>
+        </button>
+      </div>
+    </form>
+
+    <nav class="filter-bar" aria-label="任務分類篩選">
+      <div class="filter-tabs" role="tablist">
+        <button type="button" class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+          全部 <span class="tab-count" id="count-all">0</span>
+        </button>
+        <button type="button" class="filter-tab" data-filter="work" role="tab" aria-selected="false">
+          💼 工作 <span class="tab-count" id="count-work">0</span>
+        </button>
+        <button type="button" class="filter-tab" data-filter="life" role="tab" aria-selected="false">
+          🌿 生活 <span class="tab-count" id="count-life">0</span>
+        </button>
+      </div>
+      <span class="drag-hint">💡 提示：各欄位自動依 High → Medium → Low 排序，按住卡片可跨欄拖曳</span>
+    </nav>
+
+    <!-- 三欄式看板區 (To-do / Process / Done) -->
+    <section class="kanban-board" aria-label="三欄式任務進度看板">
+      <!-- Column 1: To-do -->
+      <div class="kanban-column" data-status="todo">
+        <div class="column-header">
+          <div class="column-title-group">
+            <span class="status-dot dot-todo" aria-hidden="true"></span>
+            <h2 class="column-title">To-do</h2>
+          </div>
+          <span class="column-count" id="col-count-todo">0</span>
+        </div>
+        <div class="column-dropzone" id="list-todo" data-status="todo"></div>
+      </div>
+
+      <!-- Column 2: Process -->
+      <div class="kanban-column" data-status="process">
+        <div class="column-header">
+          <div class="column-title-group">
+            <span class="status-dot dot-process" aria-hidden="true"></span>
+            <h2 class="column-title">Process</h2>
+          </div>
+          <span class="column-count" id="col-count-process">0</span>
+        </div>
+        <div class="column-dropzone" id="list-process" data-status="process"></div>
+      </div>
+
+      <!-- Column 3: Done -->
+      <div class="kanban-column" data-status="done">
+        <div class="column-header">
+          <div class="column-title-group">
+            <span class="status-dot dot-done" aria-hidden="true"></span>
+            <h2 class="column-title">Done</h2>
+          </div>
+          <span class="column-count" id="col-count-done">0</span>
+        </div>
+        <div class="column-dropzone" id="list-done" data-status="done"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
